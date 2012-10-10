@@ -56,6 +56,8 @@ static inline CTLineBreakMode CTLineBreakModeFromUILineBreakMode(UILineBreakMode
 
 static inline NSTextCheckingType NSTextCheckingTypeFromUIDataDetectorType(UIDataDetectorTypes dataDetectorType) {
     NSTextCheckingType textCheckingType = 0;
+    
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
     if (dataDetectorType & UIDataDetectorTypeAddress) {
         textCheckingType |= NSTextCheckingTypeAddress;
     }
@@ -63,6 +65,7 @@ static inline NSTextCheckingType NSTextCheckingTypeFromUIDataDetectorType(UIData
     if (dataDetectorType & UIDataDetectorTypeCalendarEvent) {
         textCheckingType |= NSTextCheckingTypeDate;
     }
+#endif
     
     if (dataDetectorType & UIDataDetectorTypeLink) {
         textCheckingType |= NSTextCheckingTypeLink;
@@ -210,6 +213,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     return self;
 }
 
+#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (!self) {
@@ -220,6 +224,7 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     
     return self;
 }
+#endif
 
 - (void)commonInit {
     self.dataDetectorTypes = UIDataDetectorTypeNone;
