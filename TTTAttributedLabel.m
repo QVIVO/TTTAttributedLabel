@@ -175,6 +175,8 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 - (CFIndex)characterIndexAtPoint:(CGPoint)p;
 - (void)drawFramesetter:(CTFramesetterRef)framesetter textRange:(CFRange)textRange inRect:(CGRect)rect context:(CGContextRef)c;
 - (void)drawStrike:(CTFrameRef)frame inRect:(CGRect)rect context:(CGContextRef)c;
+- (void)drawBackground:(CTFrameRef)frame inRect:(CGRect)rect context:(CGContextRef)c;
+
 @end
 
 @implementation TTTAttributedLabel {
