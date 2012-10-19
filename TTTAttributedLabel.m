@@ -71,9 +71,11 @@ static inline NSTextCheckingType NSTextCheckingTypeFromUIDataDetectorType(UIData
         textCheckingType |= NSTextCheckingTypeLink;
     }
     
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
     if (dataDetectorType & UIDataDetectorTypePhoneNumber) {
         textCheckingType |= NSTextCheckingTypePhoneNumber;
     }
+#endif
     
     return textCheckingType;
 }
@@ -108,7 +110,9 @@ static inline NSDictionary * NSAttributedStringAttributesFromLabel(TTTAttributed
 		{.spec = kCTParagraphStyleSpecifierAlignment, .valueSize = sizeof(CTTextAlignment), .value = (const void *)&alignment},
 		{.spec = kCTParagraphStyleSpecifierLineBreakMode, .valueSize = sizeof(CTLineBreakMode), .value = (const void *)&lineBreakMode},
         {.spec = kCTParagraphStyleSpecifierLineSpacing, .valueSize = sizeof(CGFloat), .value = (const void *)&lineSpacing},
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
         {.spec = kCTParagraphStyleSpecifierLineSpacingAdjustment, .valueSize = sizeof (CGFloat), .value = (const void *)&lineSpacingAdjustment},
+#endif
         {.spec = kCTParagraphStyleSpecifierLineHeightMultiple, .valueSize = sizeof(CGFloat), .value = (const void *)&lineHeightMultiple},
         {.spec = kCTParagraphStyleSpecifierFirstLineHeadIndent, .valueSize = sizeof(CGFloat), .value = (const void *)&firstLineIndent},
         {.spec = kCTParagraphStyleSpecifierParagraphSpacingBefore, .valueSize = sizeof(CGFloat), .value = (const void *)&topMargin},
@@ -163,7 +167,9 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @property (readwrite, nonatomic, copy) NSAttributedString *renderedAttributedText;
 @property (readwrite, nonatomic, assign) CTFramesetterRef framesetter;
 @property (readwrite, nonatomic, assign) CTFramesetterRef highlightFramesetter;
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
 @property (readwrite, nonatomic, strong) NSDataDetector *dataDetector;
+#endif
 @property (readwrite, nonatomic, strong) NSArray *links;
 @property (readwrite, nonatomic, strong) NSTextCheckingResult *activeLink;
 
@@ -192,7 +198,9 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
 @synthesize highlightFramesetter = _highlightFramesetter;
 @synthesize delegate = _delegate;
 @synthesize dataDetectorTypes = _dataDetectorTypes;
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
 @synthesize dataDetector = _dataDetector;
+#endif
 @synthesize links = _links;
 @synthesize linkAttributes = _linkAttributes;
 @synthesize activeLinkAttributes = _activeLinkAttributes;
@@ -330,17 +338,23 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     _dataDetectorTypes = dataDetectorTypes;
     [self didChangeValueForKey:@"dataDetectorTypes"];
     
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
     if (self.dataDetectorTypes != UIDataDetectorTypeNone) {
         self.dataDetector = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypeFromUIDataDetectorType(self.dataDetectorTypes) error:nil];
     }
+#endif
 }
 
 - (NSArray *)detectedLinksInString:(NSString *)string range:(NSRange)range error:(NSError **)error {
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
     if (!string || !self.dataDetector) {
         return [NSArray array];
     }
     
     return [self.dataDetector matchesInString:string options:0 range:range];
+#else
+    return [NSArray array];
+#endif
 }
 
 - (void)addLinkWithTextCheckingResult:(NSTextCheckingResult *)result attributes:(NSDictionary *)attributes {
@@ -365,9 +379,11 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     [self addLinkWithTextCheckingResult:[NSTextCheckingResult addressCheckingResultWithRange:range components:addressComponents]];
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
 - (void)addLinkToPhoneNumber:(NSString *)phoneNumber withRange:(NSRange)range {
     [self addLinkWithTextCheckingResult:[NSTextCheckingResult phoneNumberCheckingResultWithRange:range phoneNumber:phoneNumber]];
 }
+#endif
 
 - (void)addLinkToDate:(NSDate *)date withRange:(NSRange)range {
     [self addLinkWithTextCheckingResult:[NSTextCheckingResult dateCheckingResultWithRange:range date:date]];
@@ -933,12 +949,14 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
                         return;
                     }
                     break;
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_6
                 case NSTextCheckingTypePhoneNumber:
                     if ([self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithPhoneNumber:)]) {
                         [self.delegate attributedLabel:self didSelectLinkWithPhoneNumber:result.phoneNumber];
                         return;
                     }
                     break;
+#endif
                 case NSTextCheckingTypeDate:
                     if (result.timeZone && [self.delegate respondsToSelector:@selector(attributedLabel:didSelectLinkWithDate:timeZone:duration:)]) {
                         [self.delegate attributedLabel:self didSelectLinkWithDate:result.date timeZone:result.timeZone duration:result.duration];

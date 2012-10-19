@@ -22,10 +22,10 @@
 
 #import <UIKit/UIKit.h>
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_7
-#import <ApplicationServices/ApplicationServices.h>
-#else
+#if MAC_OS_X_VERSION_MAX_ALLOWED == MAC_OS_X_VERSION_10_8
 #import <CoreText/CoreText.h>
+#else
+#import <ApplicationServices/ApplicationServices.h>
 #endif
 /**
  Vertical alignment for text in a label whose bounds are larger than its text bounds
