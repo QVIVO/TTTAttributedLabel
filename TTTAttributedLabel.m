@@ -215,7 +215,6 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     return self;
 }
 
-#if (TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR)
 - (id)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (!self) {
@@ -226,7 +225,6 @@ static inline NSAttributedString * NSAttributedStringBySettingColorFromContext(N
     
     return self;
 }
-#endif
 
 - (void)commonInit {
     self.dataDetectorTypes = UIDataDetectorTypeNone;
