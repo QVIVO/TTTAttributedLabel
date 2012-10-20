@@ -1,2 +1,7 @@
+.DS_Store
+TTTAttributedLabelExample/build
 TTTAttributedLabelExample/TTTAttributedLabelExample.xcodeproj/project.xcworkspace
 TTTAttributedLabelExample/TTTAttributedLabelExample.xcodeproj/xcuserdata
+TTTAttributedLabelExampleMac/build
+TTTAttributedLabelExampleMac/TTTAttributedLabelExampleMac.xcodeproj/project.xcworkspace
+TTTAttributedLabelExampleMac/TTTAttributedLabelExampleMac.xcodeproj/xcuserdata
